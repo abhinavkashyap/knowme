@@ -6,7 +6,8 @@ authors = ["abhinavkashyap <abhinav@comp.nus.edu.sg>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9, <3.13"
+bs4 = "^0.0.2"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -15,6 +16,8 @@ ipykernel = "^6.29.4"
 langchain-openai = "^0.1.8"
 black = "^24.4.2"
 langchain-community = "^0.2.1"
+langchain-chroma = "^0.1.1"
+langchainhub = "^0.1.17"
 
 [build-system]
 requires = ["poetry-core"]
