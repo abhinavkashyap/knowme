@@ -42,7 +42,8 @@ class ChromaEmbedder:
         documents = self.splitter.create_documents(texts=texts, metadatas=metadatas)
         split_documents = self.splitter.split_documents(documents)
         vectorstore = Chroma.from_documents(
-            documents=split_documents, embedding=self.embedding_function
+            documents=split_documents,
+            embedding=self.embedding_function,
         )
 
         return vectorstore
