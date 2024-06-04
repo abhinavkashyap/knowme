@@ -6,7 +6,7 @@ from langchain_core.embeddings import Embeddings
 from langchain_core.vectorstores import VectorStore
 
 
-class EmbeddingsVectorizer:
+class ChromaEmbedder:
     def __init__(self, splitter: TextSplitter, embedding_function: Embeddings):
         """This stores the embedding of the documents into a vector store
         This only considers the RecursiveCharacterTextSplitter for now

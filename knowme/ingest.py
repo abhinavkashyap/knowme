@@ -39,6 +39,6 @@ class NotionIngestor:
             with open(filepath) as fp:
                 data = fp.read()
                 all_data.append(data)
-                metadata.append({"filename": filepath})
+                metadata.append({"filename": str(filepath)})
 
         return all_data, metadata
