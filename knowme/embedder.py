@@ -55,9 +55,9 @@ class ChromaEmbedder:
 
         if (
             self.embedding_store_directory
-            and not Path(self.embedding_store_directory).isdir()
+            and not Path(self.embedding_store_directory).is_dir()
         ):
-            assert texts is not None, f"Pass the texts to be embedded into the store"
+            assert texts is not None, "Pass the texts to be embedded into the store"
             documents = self.splitter.create_documents(texts=texts, metadatas=metadatas)
             split_documents = self.splitter.split_documents(documents)
             vectorstore = Chroma.from_documents(
