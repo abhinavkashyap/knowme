@@ -13,9 +13,6 @@ st.title("Know Me")
 
 # Get the key from the user
 openai_key = st.sidebar.text_input("Enter Your OpenAI Key", type="password")
-os.environ["OPENAI_API_KEY"] = (
-    "sk-proj-dZsrzaldTWL8F2aOFasJT3BlbkFJRZLVk9OWZh9WG66PArwp"
-)
 
 
 # TODO: Move these to a cache call that sets up everything only once.
