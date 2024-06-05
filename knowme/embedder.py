@@ -1,16 +1,14 @@
 from typing import Optional
-
-from langchain.text_splitter import TextSplitter
 from langchain_chroma import Chroma
 from langchain_core.embeddings import Embeddings
 from langchain_core.vectorstores import VectorStore
 from pathlib import Path
+from langchain_core.documents import Document
 
 
 class ChromaEmbedder:
     def __init__(
         self,
-        splitter: TextSplitter,
         embedding_function: Embeddings,
         embedding_store_directory: Optional[str],
     ):
@@ -20,8 +18,6 @@ class ChromaEmbedder:
 
         Parameters
         ----------
-        splitter : TextSplitter
-            A splitter that splits the documents into smaller pieces of text
         embedding_function: Embeddings
             An Embedding function
         embeddings_store_directory: Optional[str]
@@ -30,13 +26,10 @@ class ChromaEmbedder:
             `store_embeddings` will retrieve the store from this
             directory
         """
-        self.splitter = splitter
         self.embedding_function = embedding_function
         self.embedding_store_directory = embedding_store_directory
 
-    def store_embeddings(
-        self, texts: Optional[list[str]] = None, metadatas: Optional[list[dict]] = None
-    ) -> VectorStore:
+    def store_embeddings(self, documents: list[Document]) -> VectorStore:
         """This creates the vector store from the embeddings and then returns it
         Either the mebeddings are created based on the texts and metadatas that
         you pass or loaded from the directory
@@ -53,15 +46,16 @@ class ChromaEmbedder:
             Vector store that helps in retrieval
         """
 
+        # If the user has provided a directory to store
+        # and there is no such directory, then we create the embeddings
+        # and store them. otherwise, you just load the embeddings
         if (
             self.embedding_store_directory
             and not Path(self.embedding_store_directory).is_dir()
         ):
-            assert texts is not None, "Pass the texts to be embedded into the store"
-            documents = self.splitter.create_documents(texts=texts, metadatas=metadatas)
-            split_documents = self.splitter.split_documents(documents)
+            print("creating the embedding store")
             vectorstore = Chroma.from_documents(
-                documents=split_documents,
+                documents=documents,
                 embedding=self.embedding_function,
                 persist_directory=self.embedding_store_directory,
             )

@@ -1,9 +1,11 @@
 from pathlib import Path
-from typing import Tuple
+from langchain_community.document_loaders import UnstructuredPDFLoader
+from langchain_core.documents import Document
+from langchain.text_splitter import TextSplitter
 
 
 class NotionIngestor:
-    def __init__(self, folder_path: str):
+    def __init__(self, folder_path: str, splitter: TextSplitter):
         """_summary_
 
         Parameters
@@ -12,19 +14,20 @@ class NotionIngestor:
             Path where notion page has been exported
             The page exported by notion is .zip folder
             Unzip the folder first
+        splitter : TextSplitter
+            A splitter that splits the documents into smaller pieces of text
         """
+        self.splitter = splitter
         self.folder_path = Path(folder_path)
 
-    def ingest(self) -> Tuple[list[str], list[dict]]:
+    def ingest(self) -> list[Document]:
         """Reads the documents.
 
         Returns
         -------
-        Tuple[list[str], list[dict]]
-            Text from one notion md page is one string
-            Every dictionary contains meta information about the document
-        This will be used to create documents when SplittingText.
-        Read create_documents from TextSplitter class in langchain
+        list[Document]
+            This returns a list of Documents
+            These documents will be used to create the vector store
         """
         # Ingest all the documents that has been read
         # This also performs some kind of cleaning of the information
@@ -33,12 +36,37 @@ class NotionIngestor:
         markdown_files = self.folder_path.glob("**/*.md")
 
         all_data = []
-        metadata = []
+        metadatas = []
 
         for filepath in markdown_files:
             with open(filepath) as fp:
                 data = fp.read()
                 all_data.append(data)
-                metadata.append({"filename": str(filepath)})
+                metadatas.append({"filename": str(filepath)})
 
-        return all_data, metadata
+        documents = self.splitter.create_documents(texts=all_data, metadatas=metadatas)
+        split_documents = self.splitter.split_documents(documents)
+
+        return split_documents
+
+
+class CVIngestor:
+    def __init__(self, filename: str, splitter: TextSplitter):
+        """This ingests a cv in a pdf format
+
+        Parameters
+        ----------
+        filename : str
+            The name of the file to ingest
+        splitter: TextSplitter
+            A splitter that splits the documents into smaller pieces of text
+        """
+        self.filename = filename
+        self.splitter = splitter
+
+    def ingest(self) -> list[Document]:
+        loader = UnstructuredPDFLoader(self.filename)
+        pages: list[Document] = loader.load()
+        pages = self.splitter.split_documents(pages)
+
+        return pages
