@@ -85,7 +85,6 @@ with cv_column:
             st.error("Please upload a .pdf file. ")
 
         cv_filename = f"../data/{filename}"
-        print(cv_filename)
 
         # create the cv vectorstore
         cv_vectorstore = Path(f"../stores/{cv_file.name}_vectorstore")
@@ -106,6 +105,7 @@ def reset_session_state():
 chat_option = st.selectbox(
     "What do you want to chat with?",
     ("website", "cv", "agent"),
+    format_func=lambda str: str.capitalize(),
     on_change=reset_session_state,
 )
 
@@ -115,38 +115,40 @@ is_load_cv_chain = False
 is_load_agent = False
 
 if chat_option == "agent":
+    st.warning("Agent is a Experimental Feature. Latency is high", icon="⚠️")
     if notion_folderpath is None or notion_vectorstore is None:
-        st.error("Please upload the notion zip folder")
+        st.error("Please upload your Notion website zip folder", icon="📁")
 
     if cv_filename is None or cv_vectorstore is None:
-        st.error("Please upload the cv")
+        st.error("Please upload your CV", icon="📑")
 
     is_load_agent = True
 
 elif chat_option == "website":
     if notion_folderpath is None or notion_vectorstore is None:
-        st.error("Please upload the notion zip folder")
+        st.error("Please upload the Notion website zip folder", icon="📁")
     else:
         is_load_site_chain = True
 
 elif chat_option == "cv":
     if cv_filename is None or cv_vectorstore is None:
-        st.error("Please upload the cv")
+        st.error("Please upload your CV", icon="📑")
     else:
         is_load_cv_chain = True
 
 
 if is_load_site_chain:
-    chat = load_site_answer_chain(
-        notion_folderpath=notion_folderpath,
-        embedding_store_directory=notion_vectorstore,
-    )
+    with st.spinner("Loading the Site Chat Agent 🤖"):
+        chat = load_site_answer_chain(
+            notion_folderpath=notion_folderpath,
+            embedding_store_directory=notion_vectorstore,
+        )
 
 elif is_load_cv_chain:
-    print("Loading the cv chain")
-    chat = laod_cv_answer_chain(
-        cv_filepath=cv_filename, embedding_store_directory=cv_vectorstore
-    )
+    with st.spinner("Loading the CV Chat Agent 🤖"):
+        chat = laod_cv_answer_chain(
+            cv_filepath=cv_filename, embedding_store_directory=cv_vectorstore
+        )
 
 elif is_load_agent:
     chat = KnowMeAgent()
@@ -185,10 +187,11 @@ def chunk_generator(stream):
 if prompt:
     with st.chat_message("assistant"):
         # the answer here is a stream
-        answer = chat.chat_stream(prompt, session_id="abc")
-        with st.expander("Assistant Says: ", expanded=True):
-            # The last message is the output of the write_stream function
-            final_answer = st.write_stream(chunk_generator(answer))
-            st.session_state.messages.append(
-                {"role": "assistant", "content": final_answer}
-            )
+        with st.spinner("Our Agent is working hard to find an answer"):
+            answer = chat.chat_stream(prompt, session_id="abc")
+            with st.expander("Assistant Says: ", expanded=True):
+                # The last message is the output of the write_stream function
+                final_answer = st.write_stream(chunk_generator(answer))
+                st.session_state.messages.append(
+                    {"role": "assistant", "content": final_answer}
+                )
