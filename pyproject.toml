@@ -11,6 +11,8 @@ bs4 = "^0.0.2"
 streamlit = "^1.35.0"
 pypdf = "^4.2.0"
 unstructured = {extras = ["pdf"], version = "^0.14.4"}
+python-dotenv = "^1.0.1"
+langgraph = "^0.0.62"
 
 
 [tool.poetry.group.dev.dependencies]

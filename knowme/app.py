@@ -1,43 +1,28 @@
 import streamlit as st
 import os
-from knowme.ingest import NotionIngestor
-from knowme.embedder import ChromaEmbedder
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_openai import OpenAIEmbeddings
-from langchain_openai import ChatOpenAI
-from knowme.knowme_chat import KnowmeChat
+from dotenv import load_dotenv
+from knowme.load_chains import load_site_answer_chain
+
+# Load the environment variables
+load_dotenv()
 
 
 st.title("Know Me")
 # Write more about what the app does
 
 # Get the key from the user
-openai_key = st.sidebar.text_input("Enter Your OpenAI Key", type="password")
+openai_key = os.environ["OPENAI_API_KEY"]
 
 
 # TODO: Move these to a cache call that sets up everything only once.
-notion_folderpath = "../abhinav_notion"
+notion_folderpath = os.environ["NOTION_FOLDER"]
+site_vectorstore = os.environ["NOTION_SITE_VECTORSTORE"]
 
-ingestor = NotionIngestor(notion_folderpath)
-texts, metadatas = ingestor.ingest()
 
-text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1000, chunk_overlap=200, add_start_index=True
+chat = load_site_answer_chain(
+    notion_folderpath=notion_folderpath,
+    embedding_store_directory=site_vectorstore,
 )
-
-embedding_function = OpenAIEmbeddings()
-
-store = ChromaEmbedder(
-    text_splitter,
-    embedding_function=embedding_function,
-    embedding_store_directory="../notion_site_store",
-)
-
-chromastore = store.store_embeddings(texts, metadatas)
-llm = ChatOpenAI(model="gpt-4")
-
-
-chat = KnowmeChat(llm, chromastore)
 
 
 # this displays the chat history after refreshing
@@ -59,6 +44,6 @@ if prompt := st.chat_input("What do you want to know about me?"):
 
 if prompt:
     with st.chat_message("assistant"):
-        airesponse = chat.chat(str(prompt), session_id="abc")
-        st.session_state.messages.append({"role": "assistant", "content": airesponse})
-        st.markdown(airesponse)
+        answer = chat.chat(prompt, session_id="abc")
+        with st.expander("Know Me Says: ", expanded=True):
+            st.markdown(answer)

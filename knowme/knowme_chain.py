@@ -1,18 +1,22 @@
-from langchain_openai import ChatOpenAI
-from langchain_core.language_models import BaseChatModel
-from langchain.chains import create_retrieval_chain
+from typing import Optional
+
+from langchain.callbacks.streamlit import StreamlitCallbackHandler
+from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain_core.prompts import ChatPromptTemplate
-from langchain.chains import create_history_aware_retriever
-from langchain_core.prompts import MessagesPlaceholder
-from langchain_core.vectorstores import VectorStore
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
+from langchain_core.language_models import BaseChatModel
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_core.vectorstores import VectorStore
 
 
-class KnowmeChat:
-    def __init__(self, llm: BaseChatModel, vector_store: VectorStore):
+class KnowmeChain:
+    def __init__(
+        self,
+        llm: BaseChatModel,
+        vector_store: VectorStore,
+    ):
         """This is a retrieval based chat model to know more about a person
         This retrieves information from different vector stores.
 
@@ -26,6 +30,7 @@ class KnowmeChat:
         """
         self.llm = llm
         self.vector_store = vector_store
+
         self.search_type = "similarity"
         self.top_k_retrieval = 6
 
@@ -104,7 +109,7 @@ class KnowmeChat:
 
     def chat(self, user_input: str, session_id: str):
         """Return the response from the chat agent
-        TODO: Covert this to streaming
+
         Parameters
         ----------
         user_input : str
@@ -114,5 +119,8 @@ class KnowmeChat:
         """
 
         return self.knowme_chain.invoke(
-            {"input": user_input}, config={"configurable": {"session_id": session_id}}
+            {"input": user_input},
+            config={
+                "configurable": {"session_id": session_id},
+            },
         )["answer"]
