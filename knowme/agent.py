@@ -4,21 +4,20 @@ from langchain_openai import ChatOpenAI
 import os
 from langchain.agents import AgentExecutor, create_tool_calling_agent
 from typing import Optional
+import time
 
 
 class KnowMeAgent:
-    def __init__(
-        self,
-        openai_model: Optional[str] = "gpt-4",
-    ):
+    def __init__(self, openai_model: Optional[str] = "gpt-4", verbose=True):
         self.openai_model = openai_model
         self.site_answer_tool = SiteAnswerTool()
         self.cv_answer_tool = CVAnswerTool()
         self.tools = [self.site_answer_tool, self.cv_answer_tool]
+        self.verbose = verbose
         self.llm = ChatOpenAI(
             model=self.openai_model,
             temperature=0,
-            verbose=True,
+            verbose=self.verbose,
             api_key=os.environ["OPENAI_API_KEY"],
         )
         self.prompt = ChatPromptTemplate.from_messages(
@@ -37,7 +36,7 @@ class KnowMeAgent:
         )
         self.agent = create_tool_calling_agent(self.llm, self.tools, self.prompt)
         self.agent_executor = AgentExecutor(
-            agent=self.agent, tools=self.tools, verbose=True
+            agent=self.agent, tools=self.tools, verbose=self.verbose
         )
 
     def chat(self, user_input: str, session_id: str):
@@ -58,3 +57,17 @@ class KnowMeAgent:
             {"input": f"{user_input}. Use session_id={session_id} for agent calls "}
         )
         return output["output"]
+
+    def chat_stream(self, user_input: str, session_id: str):
+        # TODO: There is no current standard way to do the streaming
+        # of the output for the agent_executor. Instead we make this a
+        # generator that can be useful for the st.write_stream()
+        # or similar methods for showing in the UI
+        answer = self.chat(user_input, session_id)
+
+        def generator():
+            for word in answer.split():
+                yield {"answer": f"{word} "}
+                time.sleep(0.05)
+
+        return iter(generator())
