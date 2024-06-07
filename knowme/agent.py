@@ -13,8 +13,25 @@ class KnowMeAgent:
         website_chain,
         cv_chain,
         openai_model: Optional[str] = "gpt-4",
-        verbose=True,
+        verbose: bool = True,
     ):
+        """This is a knowme agent that is given  a tool to answer from the site
+        or a tool to answer from the CV. The agent decides to use the tools to
+        answer the question form the user
+
+        Parameters
+        ----------
+        website_chain
+            This is a runnable from langchain that answer questions about a website
+        cv_chain
+            This is a runnable from langchain that answers questions from a CV
+        openai_model : Optional[str], optional
+            str, by default "gpt-4"
+            This model will be used as a agent that choses the tool to use
+        verbose : bool, optional
+            bool, by default True
+            When set to true, the actions taken by the agent are explained
+        """
         self.openai_model = openai_model
         self.site_answer_tool = SiteAnswerTool()
         self.cv_answer_tool = CVAnswerTool()
@@ -61,7 +78,7 @@ class KnowMeAgent:
         Parameters
         ----------
         user_input : str
-            The input from the user
+            The query that is typed by the user
         session_id : str
             The session id to be passed to the tools
             This helps in maintaining the history and remembering
@@ -73,6 +90,33 @@ class KnowMeAgent:
         return output["output"]
 
     def chat_stream(self, user_input: str, session_id: str):
+        """The chat is streamed back to the client
+
+        Parameters
+        ----------
+        user_input : str
+            The query that is typed by the user
+
+        session_id : str
+            The session id to be passed to the tools
+            This helps in maintaining the history and remembering
+            the context
+
+        Returns
+        -------
+        Iterator
+            Iterator over a generator
+            that yield a chunk of output
+
+        Yields
+        ------
+        dict[str, str]
+            A dictionary containing the answer
+            Note that time.sleep(0.05) is added for UX purposes
+            only since the generator for the agent chat is only
+            a wrapper after the output has been generated. Currently
+            langchain does not support a native generator for an agent.
+        """
         # TODO: There is no current standard way to do the streaming
         # of the output for the agent_executor. Instead we make this a
         # generator that can be useful for the st.write_stream()

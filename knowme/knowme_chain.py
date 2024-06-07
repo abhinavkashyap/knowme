@@ -99,6 +99,19 @@ class KnowmeChain:
         )
 
     def get_session_history(self, session_id) -> BaseChatMessageHistory:
+        """Return the Message history with a chain if it is present
+
+        Parameters
+        ----------
+        session_id : str
+            A unique string that represents a session
+
+        Returns
+        -------
+        BaseChatMessageHistory
+            The message history if present. Otherwise a new
+            Message History is created.
+        """
         if session_id not in self.session_store:
             self.session_store[session_id] = ChatMessageHistory()
 
@@ -110,7 +123,7 @@ class KnowmeChain:
         Parameters
         ----------
         user_input : str
-            The user typed input
+            The user typed query
         session_id : str
             The session id that the input belongs to
         """
@@ -123,6 +136,24 @@ class KnowmeChain:
         )
 
     def chat_stream(self, user_input: str, session_id: str):
+        """Returns a stream to the client
+
+        Parameters
+        ----------
+        user_input : str
+            The user typed query
+
+        session_id : str
+            The session id which is a unique identifier of the
+            chat that you have had to the input.
+
+        Returns
+        -------
+        Stream
+            A langchain stream. This can be used for building the UI
+            The stream can be used with streamlit or other libraries that
+            support streaming from langchain
+        """
         return self.knowme_chain.stream(
             {"input": user_input},
             config={

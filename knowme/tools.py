@@ -1,4 +1,7 @@
-# Just construct and define different tools in this place from typing import Optional, Type
+"""
+This converts the chains to tools.
+These tools can be used by an agent that wishes to work with it
+"""
 
 from typing import Optional, Type
 

@@ -43,7 +43,7 @@ class ChromaEmbedder:
         Returns
         -------
         VectorStore
-            Vector store that helps in retrieval
+            Vector store that can be used to retrieve documents
         """
 
         # If the user has provided a directory to store

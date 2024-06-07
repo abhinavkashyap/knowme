@@ -23,7 +23,7 @@ def load_site_answer_chain(
     splitter: Optional[TextSplitter] = None,
     openai_model: Optional[str] = "gpt-4",
 ):
-    """This loads the site answer chain, with some defailt decisions made by the code
+    """This loads the site answer chain, with some default decisions made by the code
 
     Parameters
     ----------
@@ -68,7 +68,8 @@ def load_cv_answer_chain(
     splitter: Optional[TextSplitter] = None,
     openai_model: Optional[str] = "gpt-4",
 ):
-    """This loads the site answer chain, with some defailt decisions made by the code
+    """This loads the site answer chain, with some default decisions made.
+    This is a convenience method that can be used to load the chain
 
     Parameters
     ----------
