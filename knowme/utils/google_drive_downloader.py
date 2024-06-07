@@ -53,11 +53,3 @@ class GoogleDriveDownloader:
             for chunk in response.iter_content(CHUNK_SIZE):
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
-
-
-if __name__ == "__main__":
-    downloader = GoogleDriveDownloader()
-    downloader.download_file_from_google_drive(
-        file_id="1DRhcHz5j22xrLhIERpl7dhbTsaXiDTH9",
-        destination="./CV.pdf",
-    )

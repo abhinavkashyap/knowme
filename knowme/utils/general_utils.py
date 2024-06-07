@@ -16,6 +16,7 @@ def unzip_file(filepath: str, destination_dir: Optional[str] = None):
 
     Returns
     -------
+    None
 
     """
     with zipfile.ZipFile(str(filepath), "r") as zip_ref:
