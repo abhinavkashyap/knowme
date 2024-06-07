@@ -16,8 +16,9 @@ In today’s digital age, your professional achievements are often spread across
 
 # Demo
 
-[Watch the Video here](knowme_demo.mp4)
-[![Watch the video](knowme.webp)](knowme_demo.mp4)
+This takes you to a Google Drive link 
+
+[Watch the video](https://drive.google.com/file/d/102byW3PA_4WtQHwrfpZHX25Nkvq-LdhE/view?usp=sharing)
 
 # Setup the project.
 
