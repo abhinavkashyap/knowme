@@ -13,6 +13,9 @@ pypdf = "^4.2.0"
 unstructured = {extras = ["pdf"], version = "^0.14.4"}
 python-dotenv = "^1.0.1"
 langgraph = "^0.0.62"
+click = "^8.1.7"
+art = "^6.2"
+rich = "^13.7.1"
 
 
 [tool.poetry.group.dev.dependencies]

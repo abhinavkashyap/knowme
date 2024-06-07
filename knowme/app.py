@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from knowme.load_chains import load_site_answer_chain, laod_cv_answer_chain
 import zipfile
 from pathlib import Path
+import os
 
 # Load the environment variables
 load_dotenv()
@@ -14,6 +15,9 @@ notion_vectorstore = None
 cv_filename = None
 cv_vectorstore = None
 
+
+DATA_DIR = os.environ["DATA_DIR"]
+STORES_DIR = os.environ["STORES_DIR"]
 #######################################################################################
 # Information about the app
 #######################################################################################
@@ -54,12 +58,12 @@ with notion_column:
         if notion_folder.type == "application/zip":
             with zipfile.ZipFile(notion_folder, "r") as z:
                 # Using the root folder as the folder to
-                z.extractall("../data")
+                z.extractall(DATA_DIR)
 
-            notion_folderpath = Path(f"../data/{notion_folder.name}").with_suffix("")
+            notion_folderpath = Path(f"{DATA_DIR}/{notion_folder.name}").with_suffix("")
 
             # create the vector path if it not provided
-            notion_vectorstore = Path(f"../stores/{notion_folder.name}_vectorstore")
+            notion_vectorstore = Path(f"{STORES_DIR}/{notion_folder.name}_vectorstore")
             notion_vectorstore = str(notion_vectorstore)
 
             st.success("Extracted the zip folder. Ready to answer your questions")
@@ -76,7 +80,7 @@ with cv_column:
         filename = Path(filename)
 
         if filename.suffix == ".pdf":
-            with open(f"../data/{filename}", "wb") as fp:
+            with open(f"{DATA_DIR}/{filename}", "wb") as fp:
                 fp.write(cv_file.getvalue())
             st.success(
                 "Successfully uploaded {filename}. Ready to answer your questions"
@@ -84,10 +88,10 @@ with cv_column:
         else:
             st.error("Please upload a .pdf file. ")
 
-        cv_filename = f"../data/{filename}"
+        cv_filename = f"{DATA_DIR}/{filename}"
 
         # create the cv vectorstore
-        cv_vectorstore = Path(f"../stores/{cv_file.name}_vectorstore")
+        cv_vectorstore = Path(f"{STORES_DIR}/{cv_file.name}_vectorstore")
         cv_vectorstore = str(cv_vectorstore)
 
 st.divider()

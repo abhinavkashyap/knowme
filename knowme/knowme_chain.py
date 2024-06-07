@@ -1,5 +1,3 @@
-from typing import Optional
-
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_community.chat_message_histories import ChatMessageHistory
@@ -8,7 +6,6 @@ from langchain_core.language_models import BaseChatModel
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_core.vectorstores import VectorStore
-from langchain.output_parsers.json import SimpleJsonOutputParser
 
 
 class KnowmeChain:

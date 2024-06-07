@@ -197,6 +197,21 @@ files = [
 ]
 
 [[package]]
+name = "art"
+version = "6.2"
+description = "ASCII Art Library For Python"
+category = "main"
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "art-6.2-py3-none-any.whl", hash = "sha256:d632d1d3f5fabcaf8673abe934b51df0017bc914d106e89d45ae4ebef0e3149a"},
+    {file = "art-6.2.tar.gz", hash = "sha256:506a0c4f261289a0e0d088de7beffcb1835078c4e44b0c5353bdaf47b490e76f"},
+]
+
+[package.extras]
+dev = ["bandit (>=1.5.1)", "coverage (>=4.1)", "pydocstyle (>=3.0.0)", "vulture (>=1.0)"]
+
+[[package]]
 name = "asgiref"
 version = "3.8.1"
 description = "ASGI specs, helper code, and adapters"
@@ -7330,4 +7345,4 @@ test = ["big-O", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-it
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.9.7 || >3.9.7,<3.13"
-content-hash = "7699b7ab6230382a27360aab5f291fe8bd8642fc8b25547ab8fefb37526277da"
+content-hash = "82a44d0ce3c63bd679a8d034aed3ae134cf979ad1bb2ca1160bd536e7cbfa9c9"
