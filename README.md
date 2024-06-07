@@ -17,7 +17,7 @@ In today’s digital age, your professional achievements are often spread across
 # Demo
 
 [Watch the Video here](knowme_demo.mp4)
-
+[![Watch the video](knowme.webp)](knowme_demo.mp4)
 
 # Setup the project.
 
