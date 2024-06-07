@@ -8,10 +8,24 @@ import time
 
 
 class KnowMeAgent:
-    def __init__(self, openai_model: Optional[str] = "gpt-4", verbose=True):
+    def __init__(
+        self,
+        website_chain,
+        cv_chain,
+        openai_model: Optional[str] = "gpt-4",
+        verbose=True,
+    ):
         self.openai_model = openai_model
         self.site_answer_tool = SiteAnswerTool()
         self.cv_answer_tool = CVAnswerTool()
+
+        # This has to be done
+        # Instantiating the tool class with custom variables is not yet
+        # supported in langchain and setting instance variables
+        # is not supported as well. Just using class variables here
+
+        SiteAnswerTool.chain = website_chain
+        CVAnswerTool.chain = cv_chain
         self.tools = [self.site_answer_tool, self.cv_answer_tool]
         self.verbose = verbose
         self.llm = ChatOpenAI(

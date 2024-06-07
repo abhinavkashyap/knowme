@@ -155,7 +155,15 @@ elif is_load_cv_chain:
         )
 
 elif is_load_agent:
-    chat = KnowMeAgent()
+    site_chain = load_site_answer_chain(
+        notion_folderpath=notion_folderpath,
+        embedding_store_directory=notion_vectorstore,
+    )
+
+    cv_chain = laod_cv_answer_chain(
+        cv_filepath=cv_filename, embedding_store_directory=cv_vectorstore
+    )
+    chat = KnowMeAgent(website_chain=site_chain, cv_chain=cv_chain)
 
 
 # This displays the chat history after refreshing

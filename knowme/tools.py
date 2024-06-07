@@ -1,26 +1,16 @@
 # Just construct and define different tools in this place from typing import Optional, Type
 
 from typing import Optional, Type
-from langchain_core.tools import BaseTool
 
+from dotenv import load_dotenv
 from langchain.callbacks.manager import (
     AsyncCallbackManagerForToolRun,
     CallbackManagerForToolRun,
 )
-
-from knowme.load_chains import load_site_answer_chain, laod_cv_answer_chain
+from langchain_core.tools import BaseTool
 from pydantic import BaseModel, Field
 
-
-site_answer_chain = load_site_answer_chain(
-    notion_folderpath="/Users/abhinavkashyap/abhi/projects/knowme/abhinav_notion",
-    embedding_store_directory="/Users/abhinavkashyap/abhi/projects/knowme/notion_site_store",
-)
-
-cv_answer_chain = laod_cv_answer_chain(
-    cv_filepath="/Users/abhinavkashyap/abhi/projects/knowme/CV.pdf",
-    embedding_store_directory="/Users/abhinavkashyap/abhi/projects/knowme/cv_vectorstore",
-)
+load_dotenv()
 
 
 class SiteAnswerInput(BaseModel):
@@ -48,7 +38,7 @@ class SiteAnswerTool(BaseTool):
         session_id: str,
         run_manager: Optional[CallbackManagerForToolRun],
     ):
-        return site_answer_chain.chat(query, session_id)
+        return SiteAnswerTool.chain.chat(query, session_id)
 
     async def _arun(
         self,
@@ -57,6 +47,9 @@ class SiteAnswerTool(BaseTool):
         run_manager: Optional[AsyncCallbackManagerForToolRun],
     ):
         raise NotImplementedError("site-answer-tool does not support async calls")
+
+    def set_chain(self, chain):
+        self.chain = chain
 
 
 class CVAnswerTool(BaseTool):
@@ -72,7 +65,7 @@ class CVAnswerTool(BaseTool):
         session_id: str,
         run_manager: Optional[CallbackManagerForToolRun],
     ):
-        return cv_answer_chain.chat(query, session_id)
+        return CVAnswerTool.chain.chat(query, session_id)
 
     async def _arun(
         self,
@@ -81,3 +74,6 @@ class CVAnswerTool(BaseTool):
         run_manager: Optional[AsyncCallbackManagerForToolRun],
     ):
         raise NotImplementedError("site-answer-tool does not support async calls")
+
+    def set_chain(self, chain):
+        self.chain = chain
