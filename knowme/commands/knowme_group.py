@@ -5,16 +5,16 @@ from knowme.commands.setup import setup
 
 
 @click.group(name="knowme")
-def knowme_group():
-    """Root command"""
+def knowme():
+    """This serves as a root command for all the other command."""
     pass
 
 
 def main():
     tprint("KNOW ME")
-    knowme_group.add_command(download)
-    knowme_group.add_command(setup)
-    knowme_group()
+    knowme.add_command(download)
+    knowme.add_command(setup)
+    knowme()
 
 
 if __name__ == "__main__":

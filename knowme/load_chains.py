@@ -61,7 +61,7 @@ def load_site_answer_chain(
     return chain
 
 
-def laod_cv_answer_chain(
+def load_cv_answer_chain(
     cv_filepath: str,
     embedding_store_directory: str,
     embedding_function: Optional[Embeddings] = None,

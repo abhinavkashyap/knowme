@@ -28,6 +28,15 @@ def setup():
     default="stores",
 )
 def directories(data_dir_name, stores_dir_name):
+    """Create appropriate directories on repository
+
+    Parameters
+    ----------
+    data_dir_name : str
+        Directory to store all the user related ata
+    stores_dir_name : _type_
+        Directory that stores all the embeddings of the file
+    """
     project_dir = f"{os.path.expanduser('~/.knowme')}"
 
     # create the data dir and the stores dir
@@ -58,6 +67,13 @@ def directories(data_dir_name, stores_dir_name):
 @setup.command()
 @click.option("--api_key", prompt=True, hide_input=True, confirmation_prompt=True)
 def openai(api_key):
+    """Store the api key in the env file
+
+    Parameters
+    ----------
+    api_key : str
+        OPENAI API KEY that you want stored in the env file
+    """
     update_env_file({"OPENAI_API_KEY": api_key})
 
     console.print("[green] We have stored the api key in your .env file")

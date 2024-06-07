@@ -1,7 +1,7 @@
 import streamlit as st
 from knowme.agent import KnowMeAgent
 from dotenv import load_dotenv
-from knowme.load_chains import load_site_answer_chain, laod_cv_answer_chain
+from knowme.load_chains import load_site_answer_chain, load_cv_answer_chain
 import zipfile
 from pathlib import Path
 import os
@@ -14,6 +14,8 @@ notion_folderpath = None
 notion_vectorstore = None
 cv_filename = None
 cv_vectorstore = None
+site_chain = None
+cv_chain = None
 
 
 DATA_DIR = os.environ["DATA_DIR"]
@@ -150,20 +152,24 @@ if is_load_site_chain:
 
 elif is_load_cv_chain:
     with st.spinner("Loading the CV Chat Agent 🤖"):
-        chat = laod_cv_answer_chain(
+        chat = load_cv_answer_chain(
             cv_filepath=cv_filename, embedding_store_directory=cv_vectorstore
         )
 
 elif is_load_agent:
-    site_chain = load_site_answer_chain(
-        notion_folderpath=notion_folderpath,
-        embedding_store_directory=notion_vectorstore,
-    )
+    if is_load_site_chain:
+        site_chain = load_site_answer_chain(
+            notion_folderpath=notion_folderpath,
+            embedding_store_directory=notion_vectorstore,
+        )
 
-    cv_chain = laod_cv_answer_chain(
-        cv_filepath=cv_filename, embedding_store_directory=cv_vectorstore
-    )
-    chat = KnowMeAgent(website_chain=site_chain, cv_chain=cv_chain)
+    if is_load_cv_chain:
+        cv_chain = load_cv_answer_chain(
+            cv_filepath=cv_filename, embedding_store_directory=cv_vectorstore
+        )
+
+    if site_chain is not None and cv_chain is not None:
+        chat = KnowMeAgent(website_chain=site_chain, cv_chain=cv_chain)
 
 
 # This displays the chat history after refreshing

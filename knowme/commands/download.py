@@ -4,8 +4,8 @@ import click
 from dotenv import load_dotenv
 from rich.console import Console
 
-from knowme.utils.google_drive_downloader import GoogleDriveDownloader
 from knowme.utils.general_utils import unzip_file
+from knowme.utils.google_drive_downloader import GoogleDriveDownloader
 
 load_dotenv()
 
@@ -19,6 +19,7 @@ def download():
 
 @download.command()
 def cv():
+    """Download the CV from google drive. This is a sample CV that you can use"""
     with console.status("Downloading the Sample Website"):
         project_dir = f"{os.path.expanduser(os.environ['PROJECT_DIR'])}"
         destination_file = f"{project_dir}/data/CV.pdf"
@@ -35,7 +36,7 @@ def cv():
 
 @download.command()
 def website():
-    # Download the sample website from google drive
+    """Download the sample website from google drive. This is a sample CV that you can use"""
 
     project_dir = f"{os.path.expanduser(os.environ['PROJECT_DIR'])}"
     destination_file = f"{project_dir}/data/abhinav_notion.zip"
