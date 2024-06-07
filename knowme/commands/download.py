@@ -20,7 +20,7 @@ def download():
 @download.command()
 def cv():
     """Download the CV from google drive. This is a sample CV that you can use"""
-    with console.status("Downloading the Sample Website"):
+    with console.status("Downloading the CV"):
         project_dir = f"{os.path.expanduser(os.environ['PROJECT_DIR'])}"
         destination_file = f"{project_dir}/data/CV.pdf"
 

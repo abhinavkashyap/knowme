@@ -31,3 +31,6 @@ langchainhub = "^0.1.17"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+"knowme" = "knowme.commands.knowme_group:main"
