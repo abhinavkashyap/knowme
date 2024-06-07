@@ -14,7 +14,12 @@ Welcome to Know Me! This innovative AI tool allows anyone to easily interact wit
 
 In today’s digital age, your professional achievements are often spread across various websites and documents. Know Me consolidates this scattered information, allowing users to upload details from different sources and chat with your professional persona effortlessly.
 
-## Setup the project.
+# Demo
+
+[Watch the Video here](knowme_demo.mp4)
+
+
+# Setup the project.
 
 ### 0. Setup
 

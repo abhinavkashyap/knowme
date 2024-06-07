@@ -85,7 +85,7 @@ with cv_column:
             with open(f"{DATA_DIR}/{filename}", "wb") as fp:
                 fp.write(cv_file.getvalue())
             st.success(
-                "Successfully uploaded {filename}. Ready to answer your questions"
+                f"Successfully uploaded {filename}. Ready to answer your questions"
             )
         else:
             st.error("Please upload a .pdf file. ")
@@ -157,18 +157,21 @@ elif is_load_cv_chain:
         )
 
 elif is_load_agent:
-    if is_load_site_chain:
+    print("Should load the agent")
+
+    if notion_folderpath is not None:
         site_chain = load_site_answer_chain(
             notion_folderpath=notion_folderpath,
             embedding_store_directory=notion_vectorstore,
         )
 
-    if is_load_cv_chain:
+    if cv_filename is not None:
         cv_chain = load_cv_answer_chain(
             cv_filepath=cv_filename, embedding_store_directory=cv_vectorstore
         )
 
     if site_chain is not None and cv_chain is not None:
+        print("Loading the agent")
         chat = KnowMeAgent(website_chain=site_chain, cv_chain=cv_chain)
 
 
