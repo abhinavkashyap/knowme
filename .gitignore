@@ -163,13 +163,6 @@ cython_debug/
 
 # Remove most of these an make it as part of the input
 # to the application
-abhinav_notion
-notion_site_store
-CV.pdf
-Single_Page_CV.pdf
-cv_vectorstore
-data
-stores
+.env
 **/.DS_Store
 **/__MACOSX/
-abhinav_notion.zip

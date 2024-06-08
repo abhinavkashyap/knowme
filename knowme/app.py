@@ -157,8 +157,6 @@ elif is_load_cv_chain:
         )
 
 elif is_load_agent:
-    print("Should load the agent")
-
     if notion_folderpath is not None:
         site_chain = load_site_answer_chain(
             notion_folderpath=notion_folderpath,
